@@ -1,0 +1,9 @@
+{
+    "xbutton_login": "//*[@id=\"auth-qr-form\"]/div/button",
+	"xpath_icongroup": "//*[@id=\"MiddleColumn\"]/div[4]/div[1]/div[1]/div/div/div/div[2]/div/h3",
+	"xpath_iconadd": "//*[@id=\"RightColumn\"]/div[2]/div/button/i",
+	"xpath_iconfind": "//*[@id=\"new-members-picker-search\"]",
+	"xpath_notfound": "//*[@id=\"RightColumn\"]/div[2]/div/div/div/p",
+	"xpath_elementmember" : "//*[@id=\"RightColumn\"]/div[2]/div/div/div/div[2]/div/div/div[2]",
+	"xpath_element_add": "//*[@id=\"RightColumn\"]/div[2]/div/div/button"
+}

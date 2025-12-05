@@ -1,0 +1,6 @@
+{
+  "inputs": [
+    {"type": "QLabel", "name": "cmt", "text": "Từ khóa nhóm (BDS, du lịch, spa...)?"},
+    {"type": "QLineEdit", "name": "input_tukhoa", "placeholder": "Số lần kết bạn? (<50 uid/ ngày?)", "size": [300, 35], "default_value": "Spa Hà nội"}
+  ]
+}

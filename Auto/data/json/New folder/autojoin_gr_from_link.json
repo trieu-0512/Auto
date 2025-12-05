@@ -1,0 +1,10 @@
+{
+  "inputs": [
+    {"type": "QLabel", "name": "cmt", "text": "Từ khóa nhóm (BDS, du lịch, spa...)?"},
+    {"type": "QLineEdit", "name": "input_uid", "placeholder": "File chứa link nhóm", "size": [300, 35], "default_value": "groups.txt"},
+
+    {"type": "QLabel", "name": "cmt_solan", "text": "Số nhóm tham gia / ngày (<30 nhóm/ ngày)?"},
+    {"type": "QLineEdit", "name": "input_solan", "placeholder": "Số nhóm tham gia / ngày (<30 nhóm/ ngày)", "size": [300, 35], "default_value": "10"}
+
+  ]
+}

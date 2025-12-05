@@ -1,0 +1,25 @@
+{
+  "inputs": [
+    {"type": "QLabel", "name": "cmt", "text": "Từ khóa nhóm (bds, spa, du lịch)"},
+    {"type": "QLineEdit", "name": "input_cmt", "placeholder": "Từ khóa nhóm (bds, spa, du lịch)", "size": [300, 35], "default_value": "Tools Kiếm Tiền"},
+
+    {"type": "QLabel", "name": "label_link", "text": "Số lượng member trong nhóm >"},
+    {"type": "QLineEdit", "name": "input_link", "placeholder": "Số lượng member trong nhóm > (100,1000,10000)", "size": [300, 35], "default_value": "1000"},
+
+
+    {"type": "QLabel", "name": "label_solan", "text": "Giới hạn lần rải vào link (<10 lần mở link/ ngày)"},
+    {"type": "QLineEdit", "name": "input_solan", "placeholder": "Giới hạn lần rải vào link (<10 lần mở link/ ngày)", "size": [300, 35], "default_value": "7"},
+
+    {"type": "QLabel", "name": "label_thoigian", "text": "Thời gian dừng giữa mỗi lần rải xong 1 link"},
+    {"type": "QLineEdit", "name": "input_thoigian", "placeholder": "Thời gian dừng giữa mỗi lần rải xong 1 link", "size": [300, 35], "default_value": "600"},
+
+    {"type": "QLabel", "name": "label_solancmt", "text": "Rải bao nhiêu comment /1 link (<5)"},
+    {"type": "QLineEdit", "name": "input_solancmt", "placeholder": "Rải bao nhiêu comment /1 link (<5)", "size": [300, 35], "default_value": "3"},
+
+    {"type": "QLabel", "name": "label_folderimage", "text": "Thư mục ảnh"},
+    {"type": "QLineEdit", "name": "input_folderimage", "placeholder": "Thư muc chứa ảnh đi rải comment", "size": [300, 35], "default_value": "imagecomment"},
+
+    {"type": "QCheckBox", "name": "input_optionimage", "text": "Đăng cả ảnh", "default_checked": true},
+    {"type": "QCheckBox", "name": "input_optionoldresult", "text": "Sử dụng kết quả scan lần trước (Nhanh hơn)", "default_checked": true}
+  ]
+}

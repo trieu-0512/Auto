@@ -1,0 +1,52 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+ENV/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Testing
+.pytest_cache/
+.hypothesis/
+.coverage
+htmlcov/
+
+# Database & sensitive data
+*.db
+data/app_data.db
+data/data.db
+data/cookies-ext/
+data/proxyauth/
+
+# Executables
+*.exe
+
+# Temp files
+temp/
+*.log
+*.tmp
+
+# Profile data
+profile/
+
+# Kiro
+.kiro/
+
+# Browser binaries (too large for git)
+trinhduyet/
+
+# Large files
+*.dll
+*.pak
+*.bin
+*.dat
+data/backup/

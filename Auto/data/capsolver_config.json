@@ -1,0 +1,17 @@
+{
+  "apiKey": "YOUR_CAPSOLVER_API_KEY_HERE",
+  "appId": "",
+  "enabledForRecaptcha": true,
+  "enabledForRecaptchaV3": true,
+  "enabledForHCaptcha": true,
+  "enabledForFunCaptcha": false,
+  "enabledForImageToText": true,
+  "enabledForAwsWaf": true,
+  "enabledForCloudflare": true,
+  "recaptchaV3MinScore": 0.7,
+  "solveDelay": 0,
+  "autoSolve": true,
+  "autoOpen": false,
+  "manualSolving": false,
+  "useCapsolver": true
+}

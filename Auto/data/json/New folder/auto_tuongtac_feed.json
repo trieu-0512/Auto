@@ -1,0 +1,23 @@
+{
+  "inputs": [
+    {"type": "QLabel", "name": "label_link", "text": "Tương tác like trên newfeed giúp tăng tương tác"},
+    {
+      "type": "QLineEdit",
+      "name": "input_solan",
+      "placeholder": "Cuộn xuống bao nhiêu? (Không nên quá 15000)",
+      "size": [300, 35],
+      "default_value": "5000"
+    },
+
+    {"type": "QCheckBox", "name": "input_optioncmt", "text": "Bình luận vào những bài trên newfeed", "default_checked": false},
+
+    {"type": "QLabel", "name": "label_link", "text": "File chứa các nội dung tương tác vào newfeed"},
+    {
+      "type": "QLineEdit",
+      "name": "input_uid",
+      "placeholder": "File chứa nội dung comment vào newfeed",
+      "size": [300, 35],
+      "default_value": "cmtfeed.txt"
+    }
+  ]
+}

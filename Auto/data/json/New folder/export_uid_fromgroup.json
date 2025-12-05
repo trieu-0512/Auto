@@ -1,0 +1,34 @@
+{
+  "inputs": [
+    {
+      "type": "QLabel",
+      "name": "cmt",
+      "text": "File chứa danh sách các nhóm"
+    },
+    {
+      "type": "QLineEdit",
+      "name": "input_uidgroup",
+      "placeholder": "Nhập link hoặc UID nhóm cần quét",
+      "size": [300, 35],
+      "default_value": ""
+    },
+    {
+      "type": "QLabel",
+      "name": "soluong_uid",
+      "text": "Nhập số lượng UID cần xuất (1000,10000,100000)"
+    },
+    {
+      "type": "QLineEdit",
+      "name": "input_totaluid",
+      "placeholder": "Nhập số lượng UID cần xuất (1000,10000,100000)",
+      "size": [300, 35],
+      "default_value": "1000"
+    },
+
+    {
+      "type": "QLabel",
+      "name": "cmt",
+      "text": "Kết quả lưu ra file exel /data/facebook/"
+    }
+    ]
+}

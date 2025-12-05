@@ -1,0 +1,13 @@
+{
+  "inputs": [
+    {"type": "QLabel", "name": "label_link", "text": "File chứa danh sách các UID,Page"},
+    {"type": "QLineEdit", "name": "input_link", "placeholder": "File chứa danh sách các uid,fanpage", "size": [300, 35], "default_value": "uid.txt"},
+
+    {"type": "QLabel", "name": "cmt", "text": "Số lần kết bạn?"},
+    {"type": "QLineEdit", "name": "input_cmt", "placeholder": "FIle chứa nội dung cmt vào inbox", "size": [300, 35], "default_value": "cmt.txt"},
+
+    {"type": "QLabel", "name": "label_link", "text": "Thời gian nghỉ giữa mỗi lần inbox?"},
+    {"type": "QLineEdit", "name": "input_thoigian", "placeholder": "Thời gian nghỉ giữa mỗi lần INBOX?", "size": [300, 35], "default_value": "300"}
+
+  ]
+}

@@ -1,0 +1,12 @@
+[
+    {
+        "id": "fingerprint_check",
+        "description": "KIỂM TRA FINGERPRINT BROWSER",
+        "file_json": "fingerprint_check.json"
+    },
+    {
+        "id": "ig_post_reel",
+        "description": "ĐĂNG VIDEO REEL LÊN INSTAGRAM",
+        "file_json": "post_video.json"
+    }
+]

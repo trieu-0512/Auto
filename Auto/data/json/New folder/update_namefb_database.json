@@ -1,0 +1,6 @@
+{
+  "inputs": [
+    {"type": "QLabel", "name": "label_link", "text": "Lấy ten nick fb, cập nhật vào danh sách quản lý"}
+
+  ]
+}

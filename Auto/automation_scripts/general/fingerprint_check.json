@@ -1,0 +1,16 @@
+{
+  "script_id": "fingerprint_check",
+  "name": "Fingerprint Check",
+  "description": "Kiểm tra fingerprint browser và xuất báo cáo vấn đề ra file TXT",
+  "platform": "general",
+  "version": "2.0",
+  "use_fingerprint_checker": true,
+  "steps": [
+    {
+      "step_id": 1,
+      "action": "fingerprint_check",
+      "input": "",
+      "description": "Kiểm tra fingerprint đầy đủ và xuất báo cáo"
+    }
+  ]
+}

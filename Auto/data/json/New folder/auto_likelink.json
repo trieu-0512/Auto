@@ -1,0 +1,10 @@
+{
+  "inputs": [
+    {"type": "QLabel", "name": "label_link", "text": "File chứa danh sách link cần like"},
+    {"type": "QLineEdit", "name": "input_link", "placeholder": "File chứa danh sách link cần like", "size": [300, 35], "default_value": "like.txt"},
+
+    {"type": "QLabel", "name": "cmt", "text": "Số lần thích?"},
+    {"type": "QLineEdit", "name": "input_solan", "placeholder": "Số lần thích", "size": [300, 35], "default_value": "1"}
+
+  ]
+}

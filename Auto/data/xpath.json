@@ -1,0 +1,62 @@
+{
+  "gmail": {
+    "gmail_login": "css:a.button--mobile-before-hero-only",
+    "gmail_id": "css:input#identifierId",
+    "gmail_pass": "css:#password .whsOnd",
+    "gmail_2fa": "xpath://*[@id=\"yDmH0d\"]/c-wiz/div/div[2]/div/div/div/form/span/section[2]/div/div/section/div/div/div/ul/li[3]/div/div[2]",
+    "gmail_2fainput": "xpath://*[@id=\"knowledge-preregistered-email-response\"]",
+    "gmail_btnlogin": "css:.VfPpkd-LgbsSe-OWXEXe-k8QpJ > .VfPpkd-RLmnJb",
+    "gmail_thaydoipass": "css:#i15 .bJCr1d",
+    "gmail_changepass1": "css:input#i5",
+    "gmail_changepass2": "css:input#i11"
+  },
+
+  "facebook": {
+    "email": "xpath://*[@id=\"email\"]",
+    "pass": "xpath://*[@id=\"pass\"]",
+    "approvals_code": "xpath://*[@id=\"approvals_code\"]",
+    "checkpointSubmitButton": "xpath://*[@id=\"checkpointSubmitButton\"]",
+    "input_home": "css:.xkjl1po > .x1lliihq",
+    "input_home_popup": "css:div._1mf",
+    "input_home_popup_1": "css:.xdt5ytf > .x1ed109x",
+    "auto_dangbai_homecss1": "css:.xkjl1po > .x1lliihq",
+    "auto_dangbai_homecss2": "css:.xkjl1po > .x1lliihq",
+    "auto_dangbai_homecss_popup": "css:div.xg7h5cd",
+    "auto_dangbai_buttonnext": "css:.x6s0dn4 > .x1i10hfl > .x1n2onr6 > .x6s0dn4",
+    "auto_dangbai_buttonnextnext": "css:.xod5an3 > .x1i10hfl > .x1n2onr6 > .x6s0dn4",
+    "button_dangbai_nhom": "css:.x1l90r2v:nth-child(3) > .x9f619 > .x9f619 > .x1i10hfl > .x1n2onr6",
+    "page_input_home1": "css:.xkjl1po > .x1lliihq",
+    "page_input_home2": "css:.xkjl1po > .x1lliihq",
+    "dangbai": "Đăng",
+    "tieptheo": "Tiếp"
+  },
+  "telegram": {
+    "xbutton_login": "//*[@id=\"auth-qr-form\"]/div/button",
+    "xpath_icongroup": "//*[@id=\"MiddleColumn\"]/div[4]/div[1]/div[1]/div/div/div/div[2]/div/h3",
+    "xpath_iconadd": "//*[@id=\"RightColumn\"]/div[2]/div/button/i",
+    "xpath_iconfind": "//*[@id=\"new-members-picker-search\"]",
+    "xpath_notfound": "//*[@id=\"RightColumn\"]/div[2]/div/div/div/p",
+    "xpath_elementmember": "//*[@id=\"RightColumn\"]/div[2]/div/div/div/div[2]/div/div/div[2]",
+    "xpath_element_add": "//*[@id=\"RightColumn\"]/div[2]/div/div/button",
+    "xpath_element_invitelink": "//*[@id=\"RightColumn\"]/div[2]/div/div/button"
+  },
+  "zalo": {
+    "icon_ketban": "css:i.fa-outline-add-new-contact-2",
+    "sdt_input": "css:input.phone-i-input",
+    "sdt_timkiem": "css:.btn-primary > .truncate",
+    "ketban1": "css:.z--btn--v2:nth-child(1) > .truncate",
+    "ketban1_1": "css:.btn-neutral > .truncate",
+    "clear_loichao": "css:textarea.friend-profile__addfriend__msg",
+    "ketban2": "css:div.btn-primary",
+    "ketban2_1": "css:div.btn-neutral:nth-child(1)",
+    "ketban_end": "css:div.btn-primary",
+    "ketban_end_1": "css:.btn-primary > .truncate",
+    "icon_edit_name": "css:i.fa-Edit_1_24_Line",
+    "input_edit_name": "css:input.zl-input",
+    "edit_button_ketbanzl": "xpath://*[@id=\"zl-modal__dialog-body\"]/div/div/div/div[2]/div[2]",
+    "button_edit_name": "css:div.btn-primary",
+    "ketban_4": "xpath://*[@id=\"zl-modal__dialog-body\"]/div/div/div/div/div[1]/div/div[2]/div[2]/div[1]"
+  }
+}
+
+

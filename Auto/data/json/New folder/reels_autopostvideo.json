@@ -1,0 +1,13 @@
+{
+  "inputs": [
+
+
+    {"type": "QLabel", "name": "label_foldervideo", "text": "Thư mục chứa video"},
+    {"type": "QLineEdit", "name": "input_foldervideo", "placeholder": "Thư mục chứa video (mỗi lần đăng lấy random 1 video)", "size": [300, 35], "default_value": "video"},
+
+    {"type": "QLabel", "name": "label_cmt", "text": "Thư mục chứa video"},
+    {"type": "QLineEdit", "name": "input_cmt", "placeholder": "File chứa nội dung đăng cùng video", "size": [300, 35], "default_value": "cmt.txt"}
+
+
+  ]
+}

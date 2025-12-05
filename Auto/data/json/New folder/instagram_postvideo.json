@@ -1,0 +1,13 @@
+{
+  "inputs": [
+    {"type": "QLabel", "name": "label_link", "text": "File chứa danh sách các UID"},
+    {"type": "QLineEdit", "name": "input_link", "placeholder": "File chứa danh sách các Video", "size": [300, 35], "default_value": "uid.txt"},
+
+    {"type": "QLabel", "name": "cmt", "text": "Số lần kết bạn?"},
+    {"type": "QLineEdit", "name": "input_solan", "placeholder": "Số lần kết bạn? (<50 uid/ ngày?)", "size": [300, 35], "default_value": "5"},
+
+    {"type": "QLabel", "name": "label_link", "text": "Thời gian nghỉ giữa mỗi lần kết bạn?"},
+    {"type": "QLineEdit", "name": "input_thoigian", "placeholder": "Thời gian nghỉ giữa mỗi lần kết bạn?", "size": [300, 35], "default_value": "20"}
+
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "inputs": [
+    {"type": "QLabel", "name": "label_linkcmt", "text": "Nhập link cần share"},
+    {"type": "QLineEdit", "name": "input_listlink", "placeholder": "Nhập link cần share vào nhóm:", "size": [300, 35], "default_value": "https://www.facebook.com/mmotoolvnvn/"},
+
+    {"type": "QLabel", "name": "label_link", "text": "File chứa danh sách các nhóm"},
+    {"type": "QLineEdit", "name": "input_linkgroup", "placeholder": "File chứa danh sách các nhóm", "size": [300, 35], "default_value": "danhsachnhom.txt"},
+
+    {"type": "QLabel", "name": "label_link", "text": "File chứa danh sách nội dung comment"},
+    {"type": "QLineEdit", "name": "input_linkcmt", "placeholder": "File chứa danh sách các nhóm để share link vào", "size": [300, 35], "default_value": "cmt.txt"},
+
+
+    {"type": "QLabel", "name": "cmt", "text": "Đăng vào bao nhiêu nhóm?"},
+    {"type": "QLineEdit", "name": "input_solan", "placeholder": "Đăng vào bao nhiêu nhóm? (<10 nhóm/ ngày?)", "size": [300, 35], "default_value": "5"},
+
+    {"type": "QLabel", "name": "label_link", "text": "Thời gian nghỉ giữa mỗi lần đăng vào nhóm"},
+    {"type": "QLineEdit", "name": "input_thoigian", "placeholder": "Thời gian nghỉ giữa mỗi lần đăng vào nhóm", "size": [300, 35], "default_value": "300"},
+
+
+    {"type": "QCheckBox", "name": "input_optioncmt", "text": "Share xong có thêm comment vào bài viết vừa share không?", "default_checked": false}
+  ]
+}

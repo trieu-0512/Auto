@@ -1,0 +1,5 @@
+{
+  "inputs": [
+    {"type": "QLabel", "name": "label_link", "text": "Thay đổi dấu vân tay khi bị lỗi"}
+  ]
+}

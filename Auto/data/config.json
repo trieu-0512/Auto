@@ -1,0 +1,51 @@
+{
+  "cauhinh": {
+            "about": "tkt",
+            "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MjMzNGM0MzM0NmNlYjExNDI1NjUxZDUiLCJ0eXBlIjoiZGV2Iiwiand0aWQiOiI2MzYzM2Q1OGEwZWFjMGUyMjkzNGU0ZTEifQ.ocvN9K97LB2SnBJdX8SjtWTnLh2qAy_HYQ8x2y1hmfQ",
+            "chat_id": "-1001961479973",
+            "hienthi_debug": "N",
+            "hienthi_anh": "Y",
+            "product_tkt": "ANTIDETECT-AUTOMATION 2024 ",
+            "support_tkt": "Liên hệ: 098xxxxx",
+            "mode_ctv": "N",
+            "auto_size": "Y",
+            "zoom_size": "0.5",
+            "window_width": "800,1000",
+            "ngon_ngu" : "vi",
+			"apitimezone": "https://time.gologin.com/"
+
+  },
+
+  "proxyapikey":{
+	  "apikey_tinsoft" : "",
+	  "apikey_tmproxy" : "",
+	  "apikey_wwproxy" : ""
+	  
+  },
+  "zalo": {
+          "thoigian_delay": "50",
+          "solan_ketban": "25",
+          "linkzalo_datatong": "http://zalo.toolkiemtien.com/sdt"
+  },
+  "facebook": {
+
+  },
+
+  "telegram": {
+
+  },
+  "languagefb":
+  {
+	  "vietbinhluan": "Viết bình luận",
+      "vietcautraloi": "Viết câu trả lời",
+	  "binhluanvoi": "Bình luận với",
+	  "hayguibinhluan": "Hãy gửi bình luận",
+	  "thamgianhom": "Tham gia nhóm",
+	  "thembanbe":"Thêm bạn bè",
+	  "likefb": "Thích",
+	  "nextfb":"Tiếp",
+	  "postfb":"Đăng",
+	  "replyfb":"Phản hồi"
+  }
+
+}

@@ -1,0 +1,29 @@
+{
+  "inputs": [
+    {
+      "type": "QLabel",
+      "name": "cmt",
+      "text": "Đăng bài lên tường cá nhân)"
+    },
+    {
+      "type": "QLineEdit",
+      "name": "input_solan",
+      "placeholder": "Đăng bao nhiêu bài lên tường cá nhân?",
+      "size": [300, 35],
+      "default_value": "1"
+    },
+    {
+      "type": "QLabel",
+      "name": "time",
+      "text": "Thời gian nghỉ giữa mỗi lần đăng bài"
+    },
+    {
+      "type": "QLineEdit",
+      "name": "input_thoigian",
+      "placeholder": "Thời gian nghỉ giữa mỗi lần đăng bài",
+      "size": [300, 35],
+      "default_value": "10"
+    }
+
+  ]
+}

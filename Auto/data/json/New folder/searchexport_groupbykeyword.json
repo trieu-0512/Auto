@@ -1,0 +1,21 @@
+{
+  "inputs": [
+    {
+      "type": "QLabel",
+      "name": "cmt",
+      "text": "Từ khóa nhóm cần scan và xuất"
+    },
+    {
+      "type": "QLineEdit",
+      "name": "input_keyword",
+      "placeholder": "Nhập từ khóa nhóm cần tìm",
+      "size": [300, 35],
+      "default_value": "Việt Trì"
+    },
+    {
+      "type": "QLabel",
+      "name": "cmt",
+      "text": "Kết quả lưu ra file exel /data/facebook/"
+    }
+    ]
+}

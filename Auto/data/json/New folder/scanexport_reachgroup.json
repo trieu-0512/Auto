@@ -1,0 +1,10 @@
+{
+  "inputs": [
+    {"type": "QLabel", "name": "label_link", "text": "Link nhóm cần quét (1 user quét 1 nhóm/ 1 ngày)"},
+    {"type": "QLineEdit", "name": "input_link", "placeholder": "Nhập Link nhóm hoặc ID nhóm cần quét vào đây", "size": [300, 35], "default_value": ""},
+
+    {"type": "QLabel", "name": "label_link", "text": "Số bài viết cần quyét"},
+    {"type": "QLineEdit", "name": "input_link", "placeholder": "Số bài viết cần quét (<1.000 bài)", "size": [300, 35], "default_value": "100"}
+
+  ]
+}

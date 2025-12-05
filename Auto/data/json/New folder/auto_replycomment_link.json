@@ -1,0 +1,22 @@
+{
+  "inputs": [
+    {"type": "QLabel", "name": "label_uid", "text": "File chứa danh sách các UID, LInk"},
+    {"type": "QLineEdit", "name": "input_uid", "placeholder": "File chứa danh sách các uid", "size": [300, 35], "default_value": "uid.txt"},
+
+    {"type": "QLabel", "name": "label_cmt", "text": "File chứa danh sách các comment"},
+    {"type": "QLineEdit", "name": "input_cmt", "placeholder": "File chứa danh sách các comment", "size": [300, 35], "default_value": "cmt.txt"},
+
+
+    {"type": "QLabel", "name": "label_solan", "text": "Số lần mở link"},
+    {"type": "QLineEdit", "name": "input_solan", "placeholder": "Số lần mở link ", "size": [300, 35], "default_value": "5"},
+
+
+    {"type": "QLabel", "name": "label_thoigian", "text": "Thời gian nghỉ giữa mỗi lần kết bạn?"},
+    {"type": "QLineEdit", "name": "input_thoigian", "placeholder": "Thời gian nghỉ giữa mỗi lần kết bạn?", "size": [300, 35], "default_value": "300"},
+
+
+    {"type": "QCheckBox", "name": "input_optionimage", "text": "Sử dụng thêm cả ảnh comment", "default_checked": false},
+    {"type": "QLabel", "name": "label_folderimage", "text": "Thư mục chứa ảnh?"},
+    {"type": "QLineEdit", "name": "input_folderimage", "placeholder": "Thư muc chứa ảnh đi rải comment", "size": [300, 35], "default_value": "imagecomment"}
+  ]
+}

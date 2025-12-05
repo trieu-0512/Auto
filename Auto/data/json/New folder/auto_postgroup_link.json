@@ -1,0 +1,14 @@
+{
+  "inputs": [
+    {"type": "QLabel", "name": "label_link", "text": "File chứa danh sách các nhóm"},
+    {"type": "QLineEdit", "name": "input_link", "placeholder": "File chứa danh sách các nhóm", "size": [300, 35], "default_value": "danhsachnhom.txt"},
+
+    {"type": "QLabel", "name": "cmt", "text": "Đăng vào bao nhiêu nhóm?"},
+    {"type": "QLineEdit", "name": "input_solan", "placeholder": "Đăng vào bao nhiêu nhóm? (<10 nhóm/ ngày?)", "size": [300, 35], "default_value": "5"},
+
+    {"type": "QLabel", "name": "label_link", "text": "Thời gian nghỉ giữa mỗi lần đăng vào nhóm"},
+    {"type": "QLineEdit", "name": "input_thoigian", "placeholder": "Thời gian nghỉ giữa mỗi lần đăng vào nhóm", "size": [300, 35], "default_value": "300"},
+
+    {"type": "QCheckBox", "name": "input_optionimage", "text": "Đăng kèm cả ảnh", "default_checked": true}
+  ]
+}

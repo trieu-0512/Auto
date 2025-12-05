@@ -1,0 +1,9 @@
+{
+  "inputs": [
+    {
+      "type": "QLabel",
+      "name": "cmt",
+      "text": " Xuất tất cả các nhóm đã tham gia ra file txt để khai thác..."
+    }
+  ]
+}
