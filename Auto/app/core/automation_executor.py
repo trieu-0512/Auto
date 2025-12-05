@@ -111,7 +111,32 @@ class AutomationExecutor:
             col = input_str[6:]
             return self.excel_data.get(col, params.get(f"excel_{col}", ""))
         
+        # Replace templated placeholders with params (e.g., {video_path})
+        if params and "{" in input_str and "}" in input_str:
+            try:
+                return input_str.format(**params)
+            except Exception:
+                return input_str
+        
         return input_str
+
+    def load_automation_script(self, script_id: str) -> Optional[Dict]:
+        """
+        Load automation script from automation_scripts directory by script_id.
+        """
+        base_dir = "automation_scripts"
+        for root, _, files in os.walk(base_dir):
+            for fname in files:
+                if fname.endswith(".json"):
+                    path = os.path.join(root, fname)
+                    try:
+                        with open(path, "r", encoding="utf-8") as f:
+                            data = json.load(f)
+                        if data.get("script_id") == script_id:
+                            return data
+                    except Exception:
+                        continue
+        return None
     
     def execute_step(self, driver, step: Dict, params: Dict = None) -> bool:
         """Execute a single automation step."""
@@ -169,11 +194,16 @@ class AutomationExecutor:
             
             elif action == "upload_file":
                 # Upload file from params
-                param_key = input_val if input_val else "video_path"
-                file_path = params.get(param_key, "") if params else ""
+                file_path = ""
                 
-                if not file_path:
-                    file_path = params.get("input_link", "") if params else ""
+                # If input already resolved to a valid path, use it directly
+                if input_val and os.path.exists(input_val):
+                    file_path = input_val
+                else:
+                    param_key = input_val if input_val else "video_path"
+                    file_path = params.get(param_key, "") if params else ""
+                    if not file_path:
+                        file_path = params.get("input_link", "") if params else ""
                 
                 if file_path and os.path.exists(file_path):
                     element = self.find_element(driver, locator, timeout=5)
@@ -295,6 +325,11 @@ class AutomationExecutor:
             addon_data = self.load_addon_script(script_id)
             if addon_data:
                 return self.execute_addon_script(driver, addon_data, params, progress_callback)
+            
+            # Try to load automation script (JSON with steps)
+            auto_data = self.load_automation_script(script_id)
+            if auto_data:
+                return self.execute_addon_script(driver, auto_data, params, progress_callback)
             
             # Fallback to built-in scripts
             self.log(f"Starting built-in script: {script_id}")

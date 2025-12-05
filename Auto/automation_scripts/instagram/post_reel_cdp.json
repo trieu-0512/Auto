@@ -1,0 +1,137 @@
+{
+  "name": "instagram_post_reel_cdp",
+  "description": "Post Reel to Instagram (CDP Mode)",
+  "version": "1.0.0",
+  "platform": "instagram",
+  "mode": "cdp",
+  "inputs": [
+    {
+      "type": "QLabel",
+      "text": "Post Reel to Instagram using CDP (no Selenium detection)"
+    },
+    {
+      "type": "QLineEdit",
+      "name": "video_folder",
+      "placeholder": "Path to video folder (e.g., data/instagram/videos)",
+      "default_value": "data/instagram"
+    },
+    {
+      "type": "QLineEdit",
+      "name": "caption",
+      "placeholder": "Caption for the reel",
+      "default_value": ""
+    },
+    {
+      "type": "QLineEdit",
+      "name": "hashtags",
+      "placeholder": "Hashtags (comma separated, without #)",
+      "default_value": "reels,viral,trending"
+    },
+    {
+      "type": "QCheckBox",
+      "name": "share_to_feed",
+      "text": "Also share to Feed",
+      "default_checked": true
+    },
+    {
+      "type": "QLineEdit",
+      "name": "delay_min",
+      "placeholder": "Min delay between posts (seconds)",
+      "default_value": "60"
+    },
+    {
+      "type": "QLineEdit",
+      "name": "delay_max",
+      "placeholder": "Max delay between posts (seconds)",
+      "default_value": "180"
+    }
+  ],
+  "steps": [
+    {
+      "action": "launch_cdp",
+      "description": "Launch browser with CDP debugging"
+    },
+    {
+      "action": "connect_cdp",
+      "description": "Connect to CDP WebSocket"
+    },
+    {
+      "action": "navigate",
+      "url": "https://www.instagram.com",
+      "wait": 3
+    },
+    {
+      "action": "check_login",
+      "selector": "svg[aria-label=\"Home\"]",
+      "on_fail": "stop"
+    },
+    {
+      "action": "loop_videos",
+      "folder": "${video_folder}",
+      "extensions": [".mp4", ".mov", ".webm"],
+      "steps": [
+        {
+          "action": "click",
+          "selector": "svg[aria-label=\"New post\"]",
+          "fallback_js": "document.querySelector('svg[aria-label=\"New post\"]').closest('div[role=\"button\"]').click()"
+        },
+        {
+          "action": "wait",
+          "seconds": 2
+        },
+        {
+          "action": "click_if_exists",
+          "selector": "span:has-text(\"Reel\")"
+        },
+        {
+          "action": "upload_file",
+          "selector": "input[type=\"file\"]",
+          "file": "${current_video}"
+        },
+        {
+          "action": "wait_for",
+          "selector": "button:has-text(\"Next\")",
+          "timeout": 60
+        },
+        {
+          "action": "click",
+          "selector": "button:has-text(\"Next\")"
+        },
+        {
+          "action": "wait",
+          "seconds": 2
+        },
+        {
+          "action": "click",
+          "selector": "button:has-text(\"Next\")"
+        },
+        {
+          "action": "wait",
+          "seconds": 2
+        },
+        {
+          "action": "type",
+          "selector": "textarea[aria-label=\"Write a caption...\"]",
+          "text": "${caption}\n\n${hashtags_formatted}"
+        },
+        {
+          "action": "click",
+          "selector": "button:has-text(\"Share\")"
+        },
+        {
+          "action": "wait",
+          "seconds": 15
+        },
+        {
+          "action": "random_delay",
+          "min": "${delay_min}",
+          "max": "${delay_max}"
+        }
+      ]
+    },
+    {
+      "action": "close_cdp",
+      "description": "Disconnect and close browser"
+    }
+  ]
+}

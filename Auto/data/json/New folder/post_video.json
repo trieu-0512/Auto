@@ -1,0 +1,23 @@
+{
+  "inputs": [
+    {
+      "type": "QLabel",
+      "name": "label_info",
+      "text": "Instagram Reel: chọn video và caption"
+    },
+    {
+      "type": "QLineEdit",
+      "name": "video_path",
+      "placeholder": "Path tới file video (mp4)",
+      "size": [320, 35],
+      "default_value": "data/instagram/sample.mp4"
+    },
+    {
+      "type": "QLineEdit",
+      "name": "caption",
+      "placeholder": "Caption cho bài đăng",
+      "size": [320, 35],
+      "default_value": "Hello Instagram!"
+    }
+  ]
+}
