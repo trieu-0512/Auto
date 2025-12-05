@@ -1,0 +1,77 @@
+{
+  "id": "instagram_upload_reel",
+  "name": "instagram_upload_reel_auto",
+  "description": "📷 Instagram - Upload Reel Auto",
+  "version": "2.0.0",
+  "platform": "instagram",
+  "mode": "playwright_cdp",
+  "category": "content_upload",
+  "script_id": "instagram_upload_reel",
+  "execution_type": "instagram_reel_upload",
+  "inputs": [
+    {
+      "type": "QLabel",
+      "text": "🎬 Instagram Reel Auto Uploader"
+    },
+    {
+      "type": "QLabel",
+      "text": "Videos loaded from: data/instagram/{profile_id}/"
+    },
+    {
+      "type": "QLabel",
+      "text": "Content format in noidung.txt: filename | caption"
+    },
+    {
+      "type": "QSpinBox",
+      "name": "max_uploads",
+      "label": "Max uploads per run:",
+      "min": 1,
+      "max": 20,
+      "default_value": 1
+    },
+    {
+      "type": "QCheckBox",
+      "name": "random_order",
+      "text": "Pick videos randomly (unchecked = sequential)",
+      "default_checked": false
+    },
+    {
+      "type": "QSpinBox",
+      "name": "delay_min",
+      "label": "Min delay between uploads (seconds):",
+      "min": 30,
+      "max": 3600,
+      "default_value": 60
+    },
+    {
+      "type": "QSpinBox",
+      "name": "delay_max",
+      "label": "Max delay between uploads (seconds):",
+      "min": 60,
+      "max": 7200,
+      "default_value": 180
+    },
+    {
+      "type": "QLabel",
+      "text": "⚠️ Make sure you're logged into Instagram first!"
+    },
+    {
+      "type": "QLabel",
+      "text": "✅ After upload: video file and content line will be deleted"
+    }
+  ],
+  "requirements": [
+    "Playwright installed (pip install playwright)",
+    "Instagram account logged in",
+    "Video folder: data/instagram/{profile_id}/",
+    "Content file: noidung.txt with format 'filename | caption'"
+  ],
+  "features": [
+    "Uses Playwright CDP - no WebDriver detection",
+    "Auto aspect ratio (original)",
+    "Auto cleanup after upload",
+    "Sequential or random video order",
+    "Configurable delays",
+    "Multi-language support (EN/VN)"
+  ]
+}

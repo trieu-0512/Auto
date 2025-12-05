@@ -1,9 +1,10 @@
-# Automation Executor for running scripts with Selenium
+# Automation Executor for running scripts with Selenium or Playwright CDP
 
 import os
 import time
 import random
 import json
+import asyncio
 from typing import Dict, Any, Optional, Callable, List
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -461,3 +462,77 @@ class AutomationExecutor:
                 progress_callback(scrolled, scroll_amount)
         
         return True
+    
+    # ==================== INSTAGRAM REEL UPLOADER (Playwright CDP) ====================
+    
+    def execute_instagram_reel_upload(
+        self,
+        profile_id: str,
+        profile_path: str,
+        max_uploads: int = 1,
+        random_order: bool = False,
+        delay_min: int = 60,
+        delay_max: int = 180,
+        cdp_url: str = None,
+        progress_callback: Callable[[int, int], None] = None
+    ) -> dict:
+        """
+        Execute Instagram Reel upload using Playwright CDP.
+        
+        This uses Playwright CDP mode instead of Selenium for better anti-detection.
+        Videos are loaded from data/instagram/{profile_id}/ folder.
+        
+        Args:
+            profile_id: Profile ID (matches folder name in data/instagram/)
+            profile_path: Browser profile path
+            max_uploads: Maximum videos to upload
+            random_order: Pick videos randomly or sequentially
+            delay_min: Min delay between uploads (seconds)
+            delay_max: Max delay between uploads (seconds)
+            cdp_url: CDP WebSocket URL to connect to existing browser
+            progress_callback: Progress callback (current, total)
+        """
+        self.log(f"🚀 Starting Instagram Reel Upload (Playwright)")
+        self.log(f"   Profile: {profile_id}")
+        self.log(f"   Max uploads: {max_uploads}")
+        self.log(f"   Random order: {random_order}")
+        self.log(f"   Delay: {delay_min}-{delay_max}s")
+        
+        try:
+            # Import here to avoid circular imports
+            from app.core.instagram_reel_uploader import run_instagram_upload_sync
+            
+            # Run synchronous wrapper
+            results = run_instagram_upload_sync(
+                profile_id=profile_id,
+                profile_path=profile_path,
+                max_uploads=max_uploads,
+                random_order=random_order,
+                delay_min=delay_min,
+                delay_max=delay_max,
+                cdp_url=cdp_url,
+                log_callback=self.log,
+                progress_callback=progress_callback
+            )
+            
+            # Log results
+            self.log(f"📊 Results: {results['success']}/{results['total']} uploaded")
+            
+            if progress_callback and results['total'] > 0:
+                progress_callback(results['success'], results['total'])
+            
+            return results
+            
+        except ImportError as e:
+            self.log(f"❌ Playwright not installed: {e}")
+            self.log("   Run: pip install playwright")
+            return {"total": 0, "success": 0, "failed": 0, "error": str(e)}
+        except Exception as e:
+            self.log(f"❌ Error: {e}")
+            import traceback
+            traceback.print_exc()
+            return {"total": 0, "success": 0, "failed": 0, "error": str(e)}
+    
+    def is_instagram_upload_script(self, script_id: str) -> bool:
+        """Check if script is Instagram upload script."""
+        return script_id in ["instagram_upload_reel", "instagram_reel_upload"]

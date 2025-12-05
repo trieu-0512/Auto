@@ -322,6 +322,15 @@ class MainWindow(QMainWindow):
                 checkbox.setChecked(inp.get('default_checked', False))
                 self.script_inputs_layout.addRow(checkbox)
                 self.script_input_widgets[inp_name] = checkbox
+            
+            elif inp_type == 'QSpinBox':
+                spinbox = QSpinBox()
+                spinbox.setMinimum(inp.get('min', 0))
+                spinbox.setMaximum(inp.get('max', 100))
+                spinbox.setValue(inp.get('default_value', 1))
+                label_text = inp.get('label', inp_name)
+                self.script_inputs_layout.addRow(label_text, spinbox)
+                self.script_input_widgets[inp_name] = spinbox
     
     def get_script_input_values(self) -> dict:
         """Get current values from script input widgets."""
@@ -331,6 +340,8 @@ class MainWindow(QMainWindow):
                 values[name] = widget.text()
             elif isinstance(widget, QCheckBox):
                 values[name] = widget.isChecked()
+            elif isinstance(widget, QSpinBox):
+                values[name] = widget.value()
         return values
     
     def _create_automation_main_panel(self) -> QFrame:
@@ -789,25 +800,32 @@ class MainWindow(QMainWindow):
             self._load_profiles()
             return
         
-        # Run with script
+        # Get script params
         script_params = self.get_script_input_values()
         self.auto_progress.setVisible(True)
         self.auto_progress.setMaximum(len(selected))
         self.auto_status_label.setText(f"Running: {self.selected_script.description}")
         
+        # Check if this is Instagram Upload script (uses Playwright, not Selenium)
+        is_instagram_upload = self.automation_executor.is_instagram_upload_script(self.selected_script.id)
+        
         for i, pid in enumerate(selected):
-            if not self.automation_executor.running or i == 0:
-                # Launch browser with Selenium for automation
-                result = self.browser_manager.launch_profile(pid, use_selenium=True)
-                if result:
-                    driver = self.browser_manager.get_driver(pid)
-                    if driver:
-                        self.automation_executor.execute_script(
-                            driver,
-                            self.selected_script.id,
-                            script_params,
-                            lambda cur, total: self._update_script_progress(cur, total)
-                        )
+            if is_instagram_upload:
+                # Instagram Upload - use Playwright CDP
+                self._run_instagram_upload_for_profile(pid, script_params)
+            else:
+                # Regular script - use Selenium
+                if not self.automation_executor.running or i == 0:
+                    result = self.browser_manager.launch_profile(pid, use_selenium=True)
+                    if result:
+                        driver = self.browser_manager.get_driver(pid)
+                        if driver:
+                            self.automation_executor.execute_script(
+                                driver,
+                                self.selected_script.id,
+                                script_params,
+                                lambda cur, total: self._update_script_progress(cur, total)
+                            )
             
             self.auto_progress.setValue(i + 1)
             QApplication.processEvents()
@@ -816,6 +834,47 @@ class MainWindow(QMainWindow):
         self.auto_status_label.setText("Automation completed")
         self._load_profiles()
     
+    def _run_instagram_upload_for_profile(self, profile_id: str, params: dict):
+        """Run Instagram Reel Upload for a specific profile."""
+        try:
+            # Get profile path
+            profile = self.profile_manager.get_profile(profile_id)
+            if not profile:
+                self.auto_status_label.setText(f"Profile not found: {profile_id}")
+                return
+            
+            profile_path = profile.path
+            
+            # Get params from script inputs
+            max_uploads = int(params.get('max_uploads', 1))
+            random_order = params.get('random_order', False)
+            delay_min = int(params.get('delay_min', 60))
+            delay_max = int(params.get('delay_max', 180))
+            
+            self.auto_status_label.setText(f"📷 Uploading reels for {profile_id[:15]}...")
+            QApplication.processEvents()
+            
+            # Run Instagram upload
+            results = self.automation_executor.execute_instagram_reel_upload(
+                profile_id=profile_id,
+                profile_path=profile_path,
+                max_uploads=max_uploads,
+                random_order=random_order,
+                delay_min=delay_min,
+                delay_max=delay_max,
+                progress_callback=lambda cur, total: self._update_script_progress(cur, total)
+            )
+            
+            # Update status
+            if results.get('success', 0) > 0:
+                self.auto_status_label.setText(f"✅ Uploaded {results['success']}/{results['total']} reels")
+            else:
+                self.auto_status_label.setText(f"❌ Upload failed for {profile_id[:15]}")
+            
+        except Exception as e:
+            self.auto_status_label.setText(f"❌ Error: {e}")
+            print(f"Instagram upload error: {e}")
+    
     def _update_script_progress(self, current: int, total: int):
         """Update progress from script execution."""
         self.auto_status_label.setText(f"Progress: {current}/{total}")
@@ -823,17 +882,22 @@ class MainWindow(QMainWindow):
     
     def _run_single_automation(self, profile_id: str):
         if self.selected_script:
-            # Run with script
-            result = self.browser_manager.launch_profile(profile_id, use_selenium=True)
-            if result:
-                driver = self.browser_manager.get_driver(profile_id)
-                if driver:
-                    script_params = self.get_script_input_values()
-                    self.automation_executor.execute_script(
-                        driver,
-                        self.selected_script.id,
-                        script_params
-                    )
+            script_params = self.get_script_input_values()
+            
+            # Check if this is Instagram Upload script
+            if self.automation_executor.is_instagram_upload_script(self.selected_script.id):
+                self._run_instagram_upload_for_profile(profile_id, script_params)
+            else:
+                # Regular script - use Selenium
+                result = self.browser_manager.launch_profile(profile_id, use_selenium=True)
+                if result:
+                    driver = self.browser_manager.get_driver(profile_id)
+                    if driver:
+                        self.automation_executor.execute_script(
+                            driver,
+                            self.selected_script.id,
+                            script_params
+                        )
         else:
             self._open_browser_for_profile(profile_id)
         self._load_profiles()
