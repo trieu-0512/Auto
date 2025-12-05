@@ -236,24 +236,27 @@ class BrowserManager:
             return self.active_processes.get(profile_id) or self.active_sessions.get(profile_id)
         
         # Sync geolocation with proxy IP before launching
+        location = None
         if sync_geolocation:
-            self._sync_geolocation_with_proxy(profile)
+            location = self._sync_geolocation_with_proxy(profile)
         
         if use_selenium and SELENIUM_AVAILABLE:
-            return self._launch_with_selenium(profile, profile_id, window_position, extensions, sync_geolocation)
+            return self._launch_with_selenium(profile, profile_id, window_position, extensions, sync_geolocation, location)
         else:
-            return self._launch_with_subprocess(profile, profile_id, window_position, extensions)
+            return self._launch_with_subprocess(profile, profile_id, window_position, extensions, location)
     
     def _launch_with_subprocess(
         self,
         profile: Profile,
         profile_id: str,
         window_position: Tuple[int, int] = None,
-        extensions: List[str] = None
+        extensions: List[str] = None,
+        location: GeoLocation = None
     ) -> Optional[subprocess.Popen]:
         """
         Launch browser using subprocess (manual control mode).
         This opens the browser with profile data but without automation control.
+        Includes stealth extension to hide antidetect fingerprint.
         """
         try:
             # Build command line arguments
@@ -275,16 +278,29 @@ class BrowserManager:
             # Force dark mode
             args.append("--force-dark-mode")
             
-            # Load extensions
+            # Load extensions - always include stealth extension
             extension_paths = self._get_extension_paths(extensions)
+            # Add stealth extension
+            stealth_path = os.path.abspath(os.path.join(self.extensions_dir, "stealth"))
+            if os.path.isdir(stealth_path) and stealth_path not in extension_paths:
+                extension_paths.insert(0, stealth_path)
             if extension_paths:
                 args.append(f"--load-extension={','.join(extension_paths)}")
             
-            # Additional arguments
+            # Anti-detection arguments (same as Selenium mode)
             args.extend([
                 "--no-first-run",
                 "--no-default-browser-check",
+                "--disable-blink-features=AutomationControlled",
+                "--disable-infobars",
+                "--disable-dev-shm-usage",
+                "--disable-browser-side-navigation",
+                "--disable-gpu",
             ])
+            
+            # Timezone override to match geo IP
+            if location and location.timezone:
+                args.append(f"--timezone-for-testing={location.timezone}")
             
             # Launch browser
             process = subprocess.Popen(args)
@@ -310,7 +326,8 @@ class BrowserManager:
         profile_id: str,
         window_position: Tuple[int, int] = None,
         extensions: List[str] = None,
-        sync_geolocation: bool = True
+        sync_geolocation: bool = True,
+        location: GeoLocation = None
     ) -> Optional[Any]:
         """
         Launch browser using Selenium WebDriver (automation mode).
@@ -323,6 +340,10 @@ class BrowserManager:
         try:
             # Build options
             options = self.build_chrome_options(profile, window_position, extensions)
+            
+            # Timezone override to match geo IP
+            if location and location.timezone:
+                options.add_argument(f"--timezone-for-testing={location.timezone}")
             
             # Use chromedriver from project root
             chromedriver_path = os.path.abspath("chromedriver.exe")
@@ -421,6 +442,56 @@ class BrowserManager:
         
         return count
     
+    def cleanup_inactive_sessions(self) -> list:
+        """
+        Remove entries for sessions that have been closed manually (browser window closed)
+        and update profile status accordingly.
+        
+        Returns:
+            List of profile_ids that were cleaned up.
+        """
+        closed_profiles = []
+        
+        # Check subprocess-based browsers
+        for profile_id, process in list(self.active_processes.items()):
+            if process.poll() is not None:  # Process terminated
+                try:
+                    del self.active_processes[profile_id]
+                except KeyError:
+                    pass
+                closed_profiles.append(profile_id)
+                self.profile_manager.update_profile_status(profile_id, "inactive")
+        
+        # Check Selenium sessions
+        for profile_id, driver in list(self.active_sessions.items()):
+            dead = False
+            try:
+                # Simple ping
+                driver.execute_script("return 1")
+            except Exception:
+                dead = True
+            
+            # Also check underlying service process if available
+            if not dead:
+                service = getattr(driver, "service", None)
+                service_process = getattr(service, "process", None) if service else None
+                if service_process and service_process.poll() is not None:
+                    dead = True
+            
+            if dead:
+                try:
+                    driver.quit()
+                except Exception:
+                    pass
+                try:
+                    del self.active_sessions[profile_id]
+                except KeyError:
+                    pass
+                closed_profiles.append(profile_id)
+                self.profile_manager.update_profile_status(profile_id, "inactive")
+        
+        return closed_profiles
+    
     def get_active_sessions(self) -> Dict[str, webdriver.Chrome]:
         """
         Get all active browser sessions.
@@ -470,6 +541,12 @@ class BrowserManager:
             
             # Get geolocation from IP
             location = self.geolocation_manager.get_location_from_ip(proxy=proxy)
+            if not location and proxy:
+                # Fallback to current IP if proxy lookup failed
+                location = self.geolocation_manager.get_location_from_ip()
+            if not location:
+                # Final fallback
+                location = self.geolocation_manager.get_location_from_ip()
             
             if location:
                 # Update Preferences file
@@ -505,6 +582,10 @@ class BrowserManager:
             
             # Get geolocation from IP
             location = self.geolocation_manager.get_location_from_ip(proxy=proxy)
+            if not location and proxy:
+                location = self.geolocation_manager.get_location_from_ip()
+            if not location:
+                location = self.geolocation_manager.get_location_from_ip()
             
             if location:
                 return self.geolocation_manager.apply_geolocation_to_driver(driver, location)

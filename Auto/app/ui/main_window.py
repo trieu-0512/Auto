@@ -695,18 +695,7 @@ class MainWindow(QMainWindow):
     def _check_browser_status(self):
         """Check if browsers are still running and update status."""
         try:
-            closed_profiles = []
-            
-            # Check subprocess processes
-            for profile_id, process in list(self.browser_manager.active_processes.items()):
-                if process.poll() is not None:  # Process has terminated
-                    closed_profiles.append(profile_id)
-            
-            # Update status for closed browsers
-            for profile_id in closed_profiles:
-                if profile_id in self.browser_manager.active_processes:
-                    del self.browser_manager.active_processes[profile_id]
-                self.profile_manager.update_profile_status(profile_id, "inactive")
+            closed_profiles = self.browser_manager.cleanup_inactive_sessions()
             
             # Refresh UI if any browser was closed
             if closed_profiles:

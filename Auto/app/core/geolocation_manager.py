@@ -190,6 +190,13 @@ class GeolocationManager:
                 "longitude": location.longitude,
                 "accuracy": location.accuracy
             })
+            
+            # Also override timezone if available
+            if location.timezone:
+                driver.execute_cdp_cmd("Emulation.setTimezoneOverride", {
+                    "timezoneId": location.timezone
+                })
+            
             print(f"Geolocation set to: {location.latitude}, {location.longitude} ({location.city}, {location.country})")
             return True
         except Exception as e:
@@ -216,7 +223,7 @@ class GeolocationManager:
                 prefs["gologin"] = {}
             
             prefs["gologin"]["geolocation"] = {
-                "mode": "prompt",  # or "allow"
+                "mode": "allow",
                 "latitude": location.latitude,
                 "longitude": location.longitude,
                 "accuracy": location.accuracy
@@ -227,6 +234,17 @@ class GeolocationManager:
                 prefs["gologin"]["timezone"] = {
                     "id": location.timezone
                 }
+            
+            # Align WebRTC public IP with detected IP to avoid leaks
+            if "webRTC" not in prefs["gologin"]:
+                prefs["gologin"]["webRTC"] = {}
+            prefs["gologin"]["webRTC"].update({
+                "mode": "public",
+                "enabled": True,
+                "customize": True,
+                "fillBasedOnIp": True,
+                "publicIp": location.ip or ""
+            })
             
             with open(preferences_path, 'w', encoding='utf-8') as f:
                 json.dump(prefs, f, indent=2)
