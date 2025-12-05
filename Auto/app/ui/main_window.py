@@ -835,9 +835,9 @@ class MainWindow(QMainWindow):
         self._load_profiles()
     
     def _run_instagram_upload_for_profile(self, profile_id: str, params: dict):
-        """Run Instagram Reel Upload for a specific profile."""
+        """Run Instagram Reel Upload for a specific profile using CDP."""
         try:
-            # Get profile path
+            # Get profile
             profile = self.profile_manager.get_profile(profile_id)
             if not profile:
                 self.auto_status_label.setText(f"Profile not found: {profile_id}")
@@ -851,10 +851,29 @@ class MainWindow(QMainWindow):
             delay_min = int(params.get('delay_min', 60))
             delay_max = int(params.get('delay_max', 180))
             
+            self.auto_status_label.setText(f"🚀 Launching browser for {profile_id[:15]}...")
+            QApplication.processEvents()
+            
+            # Launch browser with CDP enabled (if not already running)
+            if not self.browser_manager.is_session_active(profile_id):
+                index = self.browser_manager.get_session_count()
+                position = self.browser_manager.calculate_window_position(index)
+                self.browser_manager.launch_profile(profile_id, window_position=position, use_selenium=False)
+                
+                # Wait for browser to start
+                import time
+                time.sleep(3)
+            
+            # Get CDP URL
+            cdp_url = self.browser_manager.get_cdp_url(profile_id)
+            if not cdp_url:
+                self.auto_status_label.setText(f"❌ CDP not available for {profile_id[:15]}")
+                return
+            
             self.auto_status_label.setText(f"📷 Uploading reels for {profile_id[:15]}...")
             QApplication.processEvents()
             
-            # Run Instagram upload
+            # Run Instagram upload with CDP connection
             results = self.automation_executor.execute_instagram_reel_upload(
                 profile_id=profile_id,
                 profile_path=profile_path,
@@ -862,6 +881,7 @@ class MainWindow(QMainWindow):
                 random_order=random_order,
                 delay_min=delay_min,
                 delay_max=delay_max,
+                cdp_url=cdp_url,
                 progress_callback=lambda cur, total: self._update_script_progress(cur, total)
             )
             

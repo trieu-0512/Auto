@@ -24,9 +24,10 @@ except ImportError:
 class BrowserManager:
     """
     Manager for browser sessions.
-    Supports two modes:
+    Supports three modes:
     - Manual mode: Opens browser with subprocess (no automation control)
-    - Automation mode: Uses Selenium WebDriver (requires matching ChromeDriver)
+    - Selenium mode: Uses Selenium WebDriver (requires matching ChromeDriver)
+    - CDP mode: Opens browser with --remote-debugging-port for Playwright CDP
     """
     
     # Default Orbita browser path
@@ -44,6 +45,10 @@ class BrowserManager:
     GRID_COLS = 5
     GRID_ROWS = 2
     MAX_CONCURRENT_PROFILES = 10
+    
+    # CDP port range for remote debugging
+    CDP_PORT_START = 9222
+    CDP_PORT_END = 9322
     
     def __init__(
         self,
@@ -69,6 +74,10 @@ class BrowserManager:
         # Store both subprocess processes and selenium drivers
         self.active_sessions: Dict[str, Any] = {}
         self.active_processes: Dict[str, subprocess.Popen] = {}
+        # Store CDP ports for each profile (for Playwright connection)
+        self.cdp_ports: Dict[str, int] = {}
+        # Track used ports
+        self._used_ports: set = set()
     
     def build_chrome_options(
         self,
@@ -245,18 +254,87 @@ class BrowserManager:
         else:
             return self._launch_with_subprocess(profile, profile_id, window_position, extensions, location)
     
+    def _get_free_cdp_port(self) -> int:
+        """
+        Get a free CDP port for remote debugging.
+        
+        Returns:
+            Available port number
+        """
+        import socket
+        import random
+        
+        # Try random ports in range
+        for _ in range(100):
+            port = random.randint(self.CDP_PORT_START, self.CDP_PORT_END)
+            if port in self._used_ports:
+                continue
+            
+            # Check if port is actually free
+            try:
+                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                    s.bind(('127.0.0.1', port))
+                    self._used_ports.add(port)
+                    return port
+            except OSError:
+                continue
+        
+        # Fallback to sequential search
+        for port in range(self.CDP_PORT_START, self.CDP_PORT_END):
+            if port not in self._used_ports:
+                try:
+                    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                        s.bind(('127.0.0.1', port))
+                        self._used_ports.add(port)
+                        return port
+                except OSError:
+                    continue
+        
+        raise RuntimeError("No free CDP ports available")
+    
+    def _release_cdp_port(self, profile_id: str):
+        """Release CDP port when browser closes."""
+        if profile_id in self.cdp_ports:
+            port = self.cdp_ports[profile_id]
+            self._used_ports.discard(port)
+            del self.cdp_ports[profile_id]
+    
+    def get_cdp_url(self, profile_id: str) -> Optional[str]:
+        """
+        Get CDP WebSocket URL for a profile.
+        
+        Args:
+            profile_id: Profile ID
+            
+        Returns:
+            CDP URL like "http://127.0.0.1:9222" or None
+        """
+        port = self.cdp_ports.get(profile_id)
+        if port:
+            return f"http://127.0.0.1:{port}"
+        return None
+    
     def _launch_with_subprocess(
         self,
         profile: Profile,
         profile_id: str,
         window_position: Tuple[int, int] = None,
         extensions: List[str] = None,
-        location: GeoLocation = None
+        location: GeoLocation = None,
+        enable_cdp: bool = True
     ) -> Optional[subprocess.Popen]:
         """
-        Launch browser using subprocess (manual control mode).
-        This opens the browser with profile data but without automation control.
-        Includes stealth extension to hide antidetect fingerprint.
+        Launch browser using subprocess with CDP support.
+        This opens the browser with profile data and enables remote debugging
+        for Playwright to connect via CDP.
+        
+        Args:
+            profile: Profile to launch
+            profile_id: Profile ID
+            window_position: Window position (x, y)
+            extensions: List of extensions to load
+            location: GeoLocation for timezone
+            enable_cdp: Enable CDP remote debugging (default True)
         """
         try:
             # Build command line arguments
@@ -267,6 +345,13 @@ class BrowserManager:
                 chrome_path,
                 f"--user-data-dir={profile_path}",
             ]
+            
+            # Enable CDP remote debugging
+            if enable_cdp:
+                cdp_port = self._get_free_cdp_port()
+                args.append(f"--remote-debugging-port={cdp_port}")
+                self.cdp_ports[profile_id] = cdp_port
+                print(f"CDP enabled on port {cdp_port}")
             
             # Window position
             if window_position:
@@ -287,7 +372,7 @@ class BrowserManager:
             if extension_paths:
                 args.append(f"--load-extension={','.join(extension_paths)}")
             
-            # Anti-detection arguments (same as Selenium mode)
+            # Anti-detection arguments
             args.extend([
                 "--no-first-run",
                 "--no-default-browser-check",
@@ -295,7 +380,6 @@ class BrowserManager:
                 "--disable-infobars",
                 "--disable-dev-shm-usage",
                 "--disable-browser-side-navigation",
-                "--disable-gpu",
             ])
             
             # Timezone override to match geo IP
@@ -312,12 +396,14 @@ class BrowserManager:
             self.profile_manager.update_profile_status(profile_id, "running")
             self.profile_manager.update_last_run(profile_id)
             
-            print(f"Launched profile {profile_id} (subprocess mode)")
+            print(f"Launched profile {profile_id} (subprocess + CDP mode)")
             return process
             
         except Exception as e:
             print(f"Error launching profile {profile_id}: {e}")
             self.profile_manager.update_profile_status(profile_id, "error")
+            # Release port if allocated
+            self._release_cdp_port(profile_id)
             return None
     
     def _launch_with_selenium(
@@ -419,6 +505,9 @@ class BrowserManager:
             finally:
                 del self.active_sessions[profile_id]
                 closed = True
+        
+        # Release CDP port
+        self._release_cdp_port(profile_id)
         
         if closed:
             self.profile_manager.update_profile_status(profile_id, "inactive")
